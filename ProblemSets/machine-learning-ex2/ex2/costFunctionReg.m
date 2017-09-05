@@ -17,9 +17,23 @@ grad = zeros(size(theta));
 %               Compute the partial derivatives and set grad to the partial
 %               derivatives of the cost w.r.t. each parameter in theta
 
+% Get objective
+z = X * theta;
+h = 1 ./ (1 + e .^ -z);
 
+% Set up theta/x matrices and vectors
+thetaZero = theta(1);
+thetaRest = theta(2:length(theta));
+xZero = X(:,1); % theta(0) is treated differently, so need to split x too
+xRest = X(:,2:size(X,2));
 
+% Cost function
+J = 1/m * sum(-y.*log(h) - (1-y).*log(1-h)) + lambda/(2*m)*sum(thetaRest.^2);
 
+% gradient
+gradientZero = 1/m * (xZero' * (h - y));
+gradient = 1/m .* (xRest' * (h-y)) + lambda/m .* thetaRest;
+grad = [gradientZero; gradient];
 
 
 % =============================================================
