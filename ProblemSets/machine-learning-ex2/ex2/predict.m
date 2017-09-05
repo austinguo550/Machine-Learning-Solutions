@@ -16,7 +16,7 @@ p = zeros(m, 1);
 %
 
 
-p = fix(sigmoid(X*theta) + 0.5);
+
 
 
 
