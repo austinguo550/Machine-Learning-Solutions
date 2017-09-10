@@ -21,13 +21,24 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+% Theta1 = 25 x 401
+% Theta2 = 10 x 26
 
+% INPUT LAYER
+% add bias unit
+inputLayer = [ones(m,1) X];   % m x f
 
+% HIDDEN LAYER
+% add bias unit
+% requires sigmoid
+hiddenLayer = sigmoid([ones(m,1) (inputLayer * Theta1')]);  % m x 25
 
-
-
-
-
+% OUTPUT LAYER
+% no bias unit
+% requires sigmoid
+outputLayer = sigmoid(hiddenLayer * Theta2');    % m x 10 (# ex, columns are probs)
+                      
+[maxProbs p] = max(outputLayer, [], 2);
 
 % =========================================================================
 

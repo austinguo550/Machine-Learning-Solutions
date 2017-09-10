@@ -30,9 +30,12 @@ X = [ones(m, 1) X];
 %       for each row.
 %       
 
+% all_theta is K x f, X is m x f
+% Doing sigmoid(X * all_theta') = sigmoid(m x K) = (m examples, columns say which class is most likely)
 
-
-
+probabilities = sigmoid(X * all_theta');
+[maxProbs classes] = max(probabilities, [], 2);
+p = classes;
 
 
 
