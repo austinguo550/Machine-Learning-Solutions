@@ -31,15 +31,18 @@ inputLayer = [ones(m,1) X];   % m x f
 % HIDDEN LAYER
 % add bias unit
 % requires sigmoid
-hiddenLayer = sigmoid([ones(m,1) (inputLayer * Theta1')]);  % m x 25
+Z2 = Theta1 * inputLayer';  % 25x401 401x5000
+hiddenLayer = sigmoid([ones(1,m); Z2]);  % 26x5000
 
 % OUTPUT LAYER
 % no bias unit
 % requires sigmoid
-outputLayer = sigmoid(hiddenLayer * Theta2');    % m x 10 (# ex, columns are probs)
-                      
-[maxProbs p] = max(outputLayer, [], 2);
+Z3 = Theta2 * hiddenLayer; %10x26 26x5000
+outputLayer = sigmoid(Z3);    % 10x5000 (# ex, columns are probs)
 
+[maxProbs classes] = max(outputLayer);
+p = classes';
+                      
 % =========================================================================
 
 
