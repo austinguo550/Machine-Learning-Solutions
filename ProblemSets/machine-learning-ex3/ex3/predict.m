@@ -32,7 +32,7 @@ inputLayer = [ones(m,1) X];   % m x f
 % add bias unit
 % requires sigmoid
 Z2 = Theta1 * inputLayer';  % 25x401 401x5000
-hiddenLayer = sigmoid([ones(1,m); Z2]);  % 26x5000
+hiddenLayer = [ones(1,m)] sigmoid(Z2)];  % 26x5000
 
 % OUTPUT LAYER
 % no bias unit
