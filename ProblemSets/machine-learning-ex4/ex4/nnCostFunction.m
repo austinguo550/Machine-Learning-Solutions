@@ -63,8 +63,10 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 a1 = [ones(m,1) X];    % mxf
-a2 = [ones(m,1) sigmoid(a1*Theta1')]; % mxf fxs3
-a3 = sigmoid(a2*Theta2');    % mxs3 s3xnum_labels
+z2 = a1*Theta1';
+a2 = [ones(m,1) sigmoid(z2)]; % mxf fxs2
+z3 = a2*Theta2';
+a3 = sigmoid(z3);    % mxs2 s2xnum_labels
 % a3 is now mxnum_labels
 h = a3;
 
@@ -87,10 +89,27 @@ J = 1/m * sum(sum(-y .* log(h) - (1-y) .* log(1-h), 2)) + lambda/(2*m) * (sum(su
 
 % -------------------------------------------------------------
 
+% BACKPROPAGATION
+% Compute deltas
+delta3 = h - y; % output layer costs    % mxnum_labels
+delta2 = (delta3 * Theta2) .* sigmoidGradient([ones(size(z2,1),1) z2]);     % mxnum_labels num_labelsxs2 = mxs2
+% REMEMBER: remove delta(0) if the corresponding neuron is 1 (bias unit)
+delta2 = delta2(:,2:end);
+
+% Compute big Deltas
+Delta2 = (delta3'*a2); % num_labelsxm * mxs2 = num_labelsxs2
+Delta1 = (delta2'*a1); % s2xm * mxf = s2xf
+             
+Theta1_grad = 1/m * Delta1;
+Theta2_grad = 1/m * Delta2;
+gradientRegularizationTheta1 = [zeros(size(Theta1,1),1), lambda/m * (Theta1)(:,2:end)];
+gradientRegularizationTheta2 = [zeros(size(Theta2,1),1), lambda/m * (Theta2)(:,2:end)];
+Theta1_grad = Theta1_grad + gradientRegularizationTheta1;
+Theta2_grad = Theta2_grad + gradientRegularizationTheta2;
+             
 % =========================================================================
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
-
-
+          
 end
